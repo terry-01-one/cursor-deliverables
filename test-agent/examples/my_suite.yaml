@@ -1,0 +1,42 @@
+# 通用 HTTP 测试套件示例
+# 运行: python -m agent run examples/sample_suite.yaml
+
+name: sample-http
+base_url: https://httpbin.org
+timeout: 10
+cases:
+  - id: get_status_ok
+    name: GET 返回 200
+    method: GET
+    path: /status/200
+    expect:
+      status: 200
+
+  - id: get_json
+    name: GET JSON 字段校验
+    method: GET
+    path: /json
+    expect:
+      status: 200
+      json_path:
+        slideshow.author: "Yours Truly"
+
+  - id: post_echo
+    name: POST 回显 body
+    method: POST
+    path: /post
+    headers:
+      Content-Type: application/json
+    body:
+      ping: pong
+    expect:
+      status: 200
+      json_path:
+        json.ping: pong
+
+  - id: not_found
+    name: 404 状态码
+    method: GET
+    path: /status/404
+    expect:
+      status: 404
